@@ -1,0 +1,13 @@
+.product-card {
+    border: 1px solid black;
+    
+}
+
+.products-container{
+    display: flex;
+}
+
+/* probably a more flexible extensible way to style */
+.product-price {
+    color: #FFFFFF;
+}
