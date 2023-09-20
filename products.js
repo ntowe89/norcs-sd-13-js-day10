@@ -1,39 +1,53 @@
-function searchProductList(searchTerm) {
-    console.log("searchTerm", searchTerm)
-    let products = [
-        {
-            name: "Pedigree Dog food",
-            price: 8.94
-        },
-        {
-            name: "Pedigree wet dog food",
-            price: 8.94
-        },
-        {
-            name: "Blue ribbon Dog food",
-            price: 8.94
-        },
-        {
-            name: "macbook pro",
-            price: 2900
-        },
-        {
-            name: "potatoes",
-            price: 3.74
-        }
-    ]
+let api_base_url = "https://60d23844858b410017b2d60b.mockapi.io"
 
-    return new Promise(function (resolve, reject) {
-        //no search return home screen
-        if(searchTerm === undefined || searchTerm === ''){
-            resolve(products)
-        }
-        //they searched
-        else {
-            resolve(products.filter(p => p.name.toLowerCase() === searchTerm.toLowerCase()))
-        }
+//gets one product by id from api
+async function getProductByIdFromApi(productId){
+    let response = await fetch(api_base_url+"/orders/"+productId)
+    console.log(response)
+    //look at http status code and status text for if it was successful
+    //how to get the data?
+    let product = await response.json()
+    return product
+}
+
+//gets all products from api
+async function getProductsFromApi(){
+    //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+    //https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+    let response = await fetch(api_base_url+"/orders")
+    console.log("response from products api", response)
+    //tell js how to read this data from response
+    // let dataAsText = await response.text()
+    // console.log("text data",dataAsText)
+
+    //put data into variable
+    let dataAsJson = await response.json()
+    console.log("json data",dataAsJson)
+    console.log("type of json data", typeof dataAsJson)
+
+    //it is now a normal jS object to interact with
+    // dataAsJson.forEach(o => console.log("Print out order", o.name, o.price))
+
+    //let other code use products from api
+    return dataAsJson
+}   
+// getProducts()
+async function searchProductList(searchTerm) {
+    console.log("searchTerm", searchTerm)
+    let products = []
+
+    products = await getProductsFromApi()
+
+    //no search return home screen
+    if(searchTerm === undefined || searchTerm === ''){
+        return products
+    }
+    //they searched
+    else {
+        return products.filter(p => p.name.toLowerCase() === searchTerm.toLowerCase())
+    }
         
-    })
+    
 }
 
 {/* 
